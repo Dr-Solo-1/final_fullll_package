@@ -1,41 +1,58 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: #111;
-  color: #fff;
-  overflow: hidden;
+  background: #1a1a1a;
+  color: #f0f0f0;
+}
+
+header {
+  text-align: center;
+  padding: 1rem;
+  background: #333;
+}
+
+main {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.viewer {
+  background: #000;
+  border-radius: 10px;
+  height: 500px;
+}
+
+#model-viewer {
+  width: 100%;
+  height: 100%;
 }
 
 .controls {
-  position: fixed;
-  top: 10px;
-  left: 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  z-index: 10;
+  margin-bottom: 1rem;
 }
 
-button, select, input[type="file"] {
-  padding: 8px;
+button, select {
+  display: block;
+  margin: 0.5rem 0;
+  padding: 0.5rem;
+  width: 100%;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  background: #444;
+  color: white;
+  font-size: 1rem;
 }
 
-.infoBox {
-  position: fixed;
-  bottom: 10px;
-  left: 10px;
-  background: rgba(0,0,0,0.8);
-  padding: 10px;
-  border-radius: 8px;
-  display: none;
-  max-width: 250px;
+button:hover, select:hover {
+  background: #666;
 }
 
-canvas {
-  width: 100%;
-  height: 100%;
-  display: block;
+.info {
+  grid-column: span 2;
+  background: #222;
+  padding: 1rem;
+  border-radius: 10px;
 }
