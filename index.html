@@ -3,46 +3,29 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Character Generator</title>
+  <title>3D Character Generator</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <h1>🎭 Character Generator</h1>
-  </header>
+  <h1>🎭 3D Character Generator</h1>
 
-  <main>
-    <section class="viewer">
-      <div id="model-viewer"></div>
-    </section>
+  <!-- اختيار الشخصية -->
+  <label for="characterSelect">اختر شخصية:</label>
+  <select id="characterSelect">
+    <option value="body.glb">شخصية 1</option>
+    <option value="Soldier.glb">شخصية 2</option>
+    <option value="TranThiNgocTham.glb">شخصية 3</option>
+  </select>
 
-    <section class="controls">
-      <label for="model-select">اختر شخصية:</label>
-      <select id="model-select">
-        <option value="assets/models/body.glb">شخصية 1</option>
-        <option value="assets/models/Soldier.glb">شخصية 2</option>
-        <option value="assets/models/TranThiNgocTham.glb">شخصية 3</option>
-      </select>
+  <!-- زر التوليد -->
+  <button id="generateBtn">توليد القصة</button>
 
-      <button id="generate">🎲 أنشئ شخصية</button>
-      <button id="upload-face">📷 أضف صورة وجه</button>
-      <input type="file" id="face-input" accept="image/*" style="display:none">
-    </section>
+  <!-- مكان القصة -->
+  <div id="storyBox"></div>
 
-    <section class="info">
-      <h2>📖 القصة</h2>
-      <p id="story">اضغط "أنشئ شخصية" لبدء المغامرة</p>
+  <!-- مكان عرض الموديل -->
+  <div id="viewer"></div>
 
-      <h2>📊 الإحصائيات</h2>
-      <ul id="stats"></ul>
-
-      <h2>💎 الندرة</h2>
-      <p id="rarity">---</p>
-    </section>
-  </main>
-
-  <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/examples/js/loaders/GLTFLoader.js"></script>
-  <script src="script.js"></script>
+  <script type="module" src="script.js"></script>
 </body>
 </html>
