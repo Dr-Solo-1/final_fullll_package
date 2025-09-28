@@ -1,107 +1,70 @@
-let scene, camera, renderer, loader, currentModel;
-const modelContainer = document.getElementById("model-viewer");
+import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.153.0/build/three.module.js";
+import { OrbitControls } from "https://cdn.jsdelivr.net/npm/three@0.153.0/examples/jsm/controls/OrbitControls.js";
+import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.153.0/examples/jsm/loaders/GLTFLoader.js";
 
-function init() {
-  scene = new THREE.Scene();
-  camera = new THREE.PerspectiveCamera(75, modelContainer.clientWidth / modelContainer.clientHeight, 0.1, 1000);
-  renderer = new THREE.WebGLRenderer({ antialias: true });
-  renderer.setSize(modelContainer.clientWidth, modelContainer.clientHeight);
-  modelContainer.appendChild(renderer.domElement);
+// عناصر HTML
+const characterSelect = document.getElementById("characterSelect");
+const generateBtn = document.getElementById("generateBtn");
+const storyBox = document.getElementById("storyBox");
 
-  const light = new THREE.HemisphereLight(0xffffff, 0x444444, 1);
-  scene.add(light);
+// إعداد المشهد
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(window.innerWidth, 500);
+document.getElementById("viewer").appendChild(renderer.domElement);
 
-  loader = new THREE.GLTFLoader();
-  camera.position.z = 3;
-  animate();
+// إضاءة
+const light = new THREE.HemisphereLight(0xffffff, 0x444444, 1);
+scene.add(light);
+
+// أدوات تحكم
+const controls = new OrbitControls(camera, renderer.domElement);
+camera.position.set(0, 1.5, 3);
+controls.update();
+
+// لودر
+const loader = new GLTFLoader();
+let currentModel = null;
+
+// تحميل الموديل
+function loadModel(modelName) {
+  const modelPath = `assets/models/${modelName}`;
+  loader.load(
+    modelPath,
+    (gltf) => {
+      if (currentModel) {
+        scene.remove(currentModel);
+      }
+      currentModel = gltf.scene;
+      currentModel.position.set(0, -1, 0);
+      scene.add(currentModel);
+    },
+    undefined,
+    (error) => console.error("حدث خطأ أثناء تحميل الموديل:", error)
+  );
 }
 
-function loadModel(path) {
-  if (currentModel) {
-    scene.remove(currentModel);
-  }
-  loader.load(path, (gltf) => {
-    currentModel = gltf.scene;
-    currentModel.scale.set(1.5, 1.5, 1.5);
-    scene.add(currentModel);
-  });
-}
+// القصة العشوائية
+const stories = [
+  "في عالم بعيد، الشخصية انطلقت في مغامرة ملحمية.",
+  "بين الجبال والوديان، الشخصية اكتشفت سرًا قديمًا.",
+  "في مدينة مظلمة، الشخصية قررت أن تكون بطلة القصة.",
+  "على شاطئ البحر، الشخصية بدأت رحلة جديدة مليئة بالأسرار."
+];
 
+// زر التوليد
+generateBtn.addEventListener("click", () => {
+  const randomStory = stories[Math.floor(Math.random() * stories.length)];
+  storyBox.innerText = randomStory;
+
+  const selectedModel = characterSelect.value;
+  loadModel(selectedModel);
+});
+
+// تشغيل العرض
 function animate() {
   requestAnimationFrame(animate);
-  if (currentModel) {
-    currentModel.rotation.y += 0.01;
-  }
   renderer.render(scene, camera);
 }
-
-// ---- شخصية عشوائية ----
-const stories = [
-  "ولد في قرية نائية وقرر خوض مغامرة ضد قوى الظلام.",
-  "جندي قديم يبحث عن المجد والانتقام.",
-  "محارب سري يختبئ بين الناس حتى تحين لحظة انطلاقه.",
-  "ساحر غامض يحمل أسرار العالم القديم."
-];
-
-const rarities = [
-  { name: "عادي", chance: 0.6 },
-  { name: "نادر", chance: 0.25 },
-  { name: "ملحمي", chance: 0.1 },
-  { name: "أسطوري", chance: 0.05 }
-];
-
-function generateCharacter() {
-  const story = stories[Math.floor(Math.random() * stories.length)];
-  document.getElementById("story").innerText = story;
-
-  let statsHtml = "";
-  const stats = ["قوة", "سرعة", "ذكاء", "تحمل", "شجاعة", "سحر", "حظ", "دقة"];
-  stats.forEach(stat => {
-    statsHtml += `<li>${stat}: ${Math.floor(Math.random() * 100)}</li>`;
-  });
-  document.getElementById("stats").innerHTML = statsHtml;
-
-  let rarityRoll = Math.random();
-  let chosenRarity = "عادي";
-  let cumulative = 0;
-  for (let r of rarities) {
-    cumulative += r.chance;
-    if (rarityRoll <= cumulative) {
-      chosenRarity = r.name;
-      break;
-    }
-  }
-  document.getElementById("rarity").innerText = chosenRarity;
-}
-
-// ---- تحميل صورة وجه ----
-document.getElementById("upload-face").addEventListener("click", () => {
-  document.getElementById("face-input").click();
-});
-
-document.getElementById("face-input").addEventListener("change", (e) => {
-  const file = e.target.files[0];
-  if (file && currentModel) {
-    const reader = new FileReader();
-    reader.onload = function (event) {
-      const texture = new THREE.TextureLoader().load(event.target.result);
-      currentModel.traverse((child) => {
-        if (child.isMesh) {
-          child.material.map = texture;
-          child.material.needsUpdate = true;
-        }
-      });
-    };
-    reader.readAsDataURL(file);
-  }
-});
-
-// ---- أحداث الأزرار ----
-document.getElementById("model-select").addEventListener("change", (e) => {
-  loadModel(e.target.value);
-});
-
-document.getElementById("generate").addEventListener("click", generateCharacter);
-
-init();
-loadModel("assets/models/body.glb");
+animate();
