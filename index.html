@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ar">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>مولِّد الشخصيات — نسخة نهائية</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header><h1>مولِّد الشخصيات — النسخة النهائية</h1></header>
+<main class="layout">
+  <aside class="panel left">
+    <h2>الإعدادات</h2>
+    <label>اختر شخصية:
+      <select id="modelSelect">
+        <option value="body.glb">الشخصية 1</option>
+        <option value="Soldier.glb">الشخصية 2</option>
+        <option value="TranThiNgocTham.glb">الشخصية 3</option>
+      </select>
+    </label>
+    <label>رفع صورة للوجه: <input id="faceUpload" type="file" accept="image/*"></label>
+    <label>رفع صوت: <input id="voiceUpload" type="file" accept="audio/*"></label>
+    <hr>
+    <button id="watchAd">🎥 شاهد إعلان</button>
+    <button id="generate" disabled>✨ أنشئ شخصية</button>
+    <button id="save" disabled>💾 حفظ</button>
+    <button id="download" disabled>⬇️ تنزيل صورة</button>
+    <div id="hint" class="hint">اضغط "شاهد إعلان" لتمكين التوليد.</div>
+  </aside>
+
+  <section class="panel center">
+    <div id="viewer"></div>
+    <div class="overlay"><div id="charName">—</div><div id="rarityBadge">—</div></div>
+  </section>
+
+  <aside class="panel right">
+    <h3>تفاصيل</h3>
+    <div id="meta"><span id="power">—</span> • <span id="rarity">—</span></div>
+    <div id="stats"></div>
+    <h4>القصة</h4><p id="story">—</p>
+    <h4>المعرض</h4><div id="gallery"></div>
+  </aside>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.152.2/examples/js/controls/OrbitControls.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.152.2/examples/js/loaders/GLTFLoader.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
